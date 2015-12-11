@@ -92,11 +92,12 @@ export default function Dimensions ({ getHeight = defaultGetHeight, getWidth = d
         }
         this.setState({
           containerWidth: getWidth(container),
-          containerHeight: getHeight(container)
+          containerHeight: getHeight(container),
+          previousOrientation: window.orientation
         })
       }
 
-      onResize = () => {
+      onResizeOrOrientationChange = () => {
         if (this.rqf) return
         this.rqf = window.requestAnimationFrame(() => {
           this.rqf = null
@@ -106,11 +107,13 @@ export default function Dimensions ({ getHeight = defaultGetHeight, getWidth = d
 
       componentDidMount () {
         this.updateDimensions()
-        window.addEventListener('resize', this.onResize, false)
+        window.addEventListener('resize', this.onResizeOrOrientationChange, false)
+        window.addEventListener('orientationchange', this.onResizeOrOrientationChange, false)
       }
 
       componentWillUnmount () {
-        window.removeEventListener('resize', this.onResize)
+        window.removeEventListener('resize', this.onResizeOrOrientationChange)
+        window.removeEventListener('orientationchange', this.onResizeOrOrientationChange)
       }
 
       render () {

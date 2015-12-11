@@ -121,11 +121,12 @@ function Dimensions() {
           }
           _this.setState({
             containerWidth: getWidth(container),
-            containerHeight: getHeight(container)
+            containerHeight: getHeight(container),
+            previousOrientation: window.orientation
           });
         };
 
-        this.onResize = function () {
+        this.onResizeOrOrientationChange = function () {
           if (_this.rqf) return;
           _this.rqf = window.requestAnimationFrame(function () {
             _this.rqf = null;
@@ -136,11 +137,13 @@ function Dimensions() {
 
       _class.prototype.componentDidMount = function componentDidMount() {
         this.updateDimensions();
-        window.addEventListener('resize', this.onResize, false);
+        window.addEventListener('resize', this.onResizeOrOrientationChange, false);
+        window.addEventListener('orientationchange', this.onResizeOrOrientationChange, false);
       };
 
       _class.prototype.componentWillUnmount = function componentWillUnmount() {
-        window.removeEventListener('resize', this.onResize);
+        window.removeEventListener('resize', this.onResizeOrOrientationChange);
+        window.removeEventListener('orientationchange', this.onResizeOrOrientationChange);
       };
 
       _class.prototype.render = function render() {
